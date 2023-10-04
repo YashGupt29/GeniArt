@@ -1,2 +1,3 @@
 # GeniArt
-MERN stack for image generation
+
+MERN Stack App for Ai image generation
