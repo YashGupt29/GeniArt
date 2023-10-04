@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormField } from "../components/FormField";
+import { preview } from "../assets";
+import Loader from "../components/Loader";
+import { getRandomPrompts } from "../utils";
 
 export const CreatePost /* eslint-disable no-unused-vars */ = () => {
   const navigate = useNavigate();
@@ -13,8 +16,14 @@ export const CreatePost /* eslint-disable no-unused-vars */ = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
   const handleSubmit = () => {};
-  const handleChange = () => {};
-  const handleSupriseMe = () => {};
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.value]: [e.target.value] });
+  };
+  const handleSupriseMe = () => {
+    const randomPrompt = getRandomPrompts(form.prompt);
+    setForm({ ...form, prompt: randomPrompt });
+  };
+  const generateImage = () => {};
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -39,12 +48,55 @@ export const CreatePost /* eslint-disable no-unused-vars */ = () => {
             labelName="Prompt"
             name="prompt"
             type="text"
-            placeholder="an armchair in the shape of an avocado"
+            placeholder="An armchair in the shape of an avocado"
             value={form.prompt}
             handleChange={handleChange}
             isSupriseMe
             handleSupriseMe={handleSupriseMe}
           />
+        </div>
+        <div
+          className="relative mt-5  bg-gray-50 border border-gray-300 text-gray-900 text-sm 
+        rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center"
+        >
+          {form.photo ? (
+            <img
+              src={form.photo}
+              alt="form.prompt"
+              className="w-full h-full object-contain"
+            />
+          ) : (
+            <img
+              src={preview}
+              alt="preview"
+              className="w-9/12 h-9/12 object-contain opacity-50"
+            />
+          )}
+          {generatingImg && (
+            <div className="absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg">
+              <Loader />
+            </div>
+          )}
+        </div>
+        <div className="mt-5 flex gap-5">
+          <button
+            type="button"
+            onClick={generateImage}
+            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          >
+            {generatingImg ? "generating...." : "Generate"}
+          </button>
+        </div>
+        <div className="mt-10">
+          <p className="mt-2 text-[#666e75] text-[14px]">
+            Once you have created an image ,You can Share it with the community
+          </p>
+          <button
+            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm
+          w-full sm:w-auto px-5 py-2.5 text-center"
+          >
+            {loading ? "Sharing..." : "Share with the community"}
+          </button>
         </div>
       </form>
     </section>
